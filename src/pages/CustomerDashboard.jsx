@@ -268,7 +268,7 @@ export default function CustomerDashboard() {
     setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
     setChatInput("");
     setIsTyping(true);
-    const aiReply = await sendMessageToGemini(userMessage);
+    const aiReply = await sendMessageToGemini(userMessage, userRole);
     setIsTyping(false);
     setMessages(prev => [...prev, { sender: "bot", text: aiReply }]);
   };
@@ -512,16 +512,22 @@ export default function CustomerDashboard() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                      <input
-                        type="number"
-                        placeholder="0"
-                        className="w-full border-2 border-gray-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-                        value={quantity}
-                        onChange={(e) => {
-                          setQuantity(e.target.value);
-                          setTotal(calculateTotal(service, e.target.value));
-                        }}
-                      />
+                      <div className="relative w-full">
+                        <div className="relative w-full">
+                        <input
+                          type="number"
+                          placeholder="0"
+                          className="w-full border-2 border-gray-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                          value={quantity}
+                          min={0}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setQuantity(val);
+                            setTotal(calculateTotal(service, val));
+                          }}
+                        />
+                      </div>
+                      </div>
                     </div>
 
                     <div>

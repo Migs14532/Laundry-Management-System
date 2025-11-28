@@ -143,7 +143,7 @@ export default function Login() {
                 onClick={() => navigate("/signup")}
                 className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors cursor-pointer"
               >
-                Create Account
+                Sign Up
               </button>
             </p>
           </div>
