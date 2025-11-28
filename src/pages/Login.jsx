@@ -6,6 +6,7 @@ import supabase from "../lib/supabase";
 export default function Login() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -19,44 +20,47 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    setErrorMessage("");
+  setErrorMessage("");
+  setLoading(true);
 
-    // Sign in user
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: loginData.email,
-      password: loginData.password,
-    });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: loginData.email,
+    password: loginData.password,
+  });
 
-    if (error) {
-      setErrorMessage(error.message);
-      return;
-    }
+  if (error) {
+    setErrorMessage(error.message);
+    setLoading(false);
+    return;
+  }
 
-    const user = data.user;
-    if (!user) {
-      setErrorMessage("Something went wrong. Please try again.");
-      return;
-    }
+  const user = data.user;
+  if (!user) {
+    setErrorMessage("Something went wrong. Please try again.");
+    setLoading(false);
+    return;
+  }
 
-    // Fetch user profile to get role
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
-    if (profileError) {
-      setErrorMessage("Failed to retrieve user profile.");
-      return;
-    }
+  if (profileError) {
+    setErrorMessage("Failed to retrieve user profile.");
+    setLoading(false);
+    return;
+  }
 
-    // Redirect based on role
-    if (profile.role === "admin") {
-      navigate("/admin-dashboard");
-    } else {
-      navigate("/customer-dashboard");
-    }
-  };
+  setLoading(false);
+
+  if (profile.role === "admin") {
+    navigate("/admin-dashboard");
+  } else {
+    navigate("/customer-dashboard");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center px-4 py-8">
@@ -122,10 +126,15 @@ export default function Login() {
 
           <button
             onClick={handleLogin}
-            className="w-full mt-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-base font-semibold rounded-xl hover:from-blue-700 hover:to-blue-600 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-blue-200 cursor-pointer"
+            disabled={loading}
+            className="w-full mt-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white text-base font-semibold rounded-xl 
+              hover:from-blue-700 hover:to-blue-600 transform hover:scale-[1.02] active:scale-[0.98] 
+              transition-all duration-200 shadow-lg shadow-blue-200 
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
+
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Home, Users, LogOut, ShoppingBag, DollarSign, Sparkles } from "lucide-react";
+import { Home, Users, LogOut, ShoppingBag, DollarSign, Sparkles, ChevronLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
 import toast from "react-hot-toast";
@@ -102,6 +102,15 @@ export default function AdminDashboard() {
       {/* MAIN CONTENT */}
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
+
+          {/* BACK BUTTON */}
+          <button
+            onClick={() => navigate("/customer-dashboard")}
+            className="mb-6 p-3 hover:bg-white rounded-xl transition-all duration-200 cursor-pointer inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-700" />
+          </button>
+
           {/* Header */}
           <div className="mb-10">
             <h1 className="text-4xl font-extrabold text-gray-800 mb-2">

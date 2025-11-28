@@ -6,7 +6,6 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import Customer from "./pages/Customer";
-import Staff from "./pages/Staff";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
@@ -37,14 +36,6 @@ export default function App() {
           element={
             <ProtectedRoute adminOnly={true}>
               <Customer />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/staff"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <Staff />
             </ProtectedRoute>
           }
         />
